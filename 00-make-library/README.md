@@ -7,8 +7,14 @@
 웹 API 활용
 
 - `document.createElement()`
-- 
+- `Element.classList`
+- `Element.setAttribute()`
+- `Element.appendChild()`
+- `Element.append()`
 
 ## 선언적 프로그래밍
 
 라이브러리 활용
+
+- `Euid.createElement()`
+- `EuidDOM.createRoot()`
