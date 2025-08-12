@@ -1,4 +1,3 @@
-
 import App from './app.js'
 
 const MIN = 30,
@@ -38,7 +37,7 @@ if (!container) throw new Error('문서에 #container 요소가 존재하지 않
 const reactDOMRoot = ReactDOM.createRoot(container)
 
 function render() {
-  reactDOMRoot.render(React.createElement(App, { count }))
+  reactDOMRoot.render(React.createElement(App, { count, targetCount }))
 }
 
 let animateId
