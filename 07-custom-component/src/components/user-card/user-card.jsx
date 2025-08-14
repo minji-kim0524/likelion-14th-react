@@ -10,8 +10,8 @@ export default function UserCard(props) {
   console.log(props)
 
   return (
-    <article className="user-card" aria-labelledby="user-han-di1k">
-      <h2 id="user-han-di1k" className="user-name">
+    <article className="user-card" aria-labelledby={props.id}>
+      <h2 id={props.id} className="user-name">
         {props.name}
       </h2>
       <dl className="user-info">

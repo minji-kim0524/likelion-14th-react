@@ -1,20 +1,33 @@
+import userData from './data/user.json'
 import UserCard from './components/user-card/user-card'
+
+// JSON
+// Array Data -> Component(props) -> Rendering -> View
 
 export default function App() {
   return (
     <section className="app demo">
       <h1>UserCard 커스텀 컴포넌트</h1>
       <UserCard
-        name="박주성"
-        phoneNumber="010-1234-5678"
-        address="강원특별자치도 삼척시 명륜동 12-10"
-        age={46}
+        id={userData[0].id}
+        name={userData[0].name}
+        phoneNumber={userData[0].phoneNumber}
+        address={userData[0].address}
+        age={userData[0].age}
       />
       <UserCard
-        name="한아름"
-        phoneNumber="010-5678-1234"
-        address="서울특별시 중구 이청동 98-1"
-        age={31}
+        id={userData[1].id}
+        name={userData[1].name}
+        phoneNumber={userData[1].phoneNumber}
+        address={userData[1].address}
+        age={userData[1].age}
+      />
+      <UserCard
+        id={userData[2].id}
+        name={userData[2].name}
+        phoneNumber={userData[2].phoneNumber}
+        address={userData[2].address}
+        age={userData[2].age}
       />
     </section>
   )
