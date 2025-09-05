@@ -20,7 +20,25 @@ export default function AppPage() {
 
   useEffect(() => {
     // [실습] 최초 마운트 시, Supabase에서 현재 사용자 정보 가져오기
-    su
+    supabase.auth.getUser().then(async ({ error, data }) => {
+      if (error) {
+        toast.error(`사용자 검색 오류 발생! ${error.message}`)
+      } else {
+        const { error: userProfileError, data: userProfile } = await supabase
+          .from('profiles')
+          .select('username,email,bio')
+          .eq('id', data.user.id)
+          .single()
+
+        if (userProfileError) {
+          toast.error(
+            `프로필 데이터 가져오기 오류 발생! ${userProfileError.message}`
+          )
+        } else {
+          setUser(userProfile)
+        }
+      }
+    })
     // [실습] Supabase 인증 상태 변경 구독
     // ...
     // [실습] Supabase 인증 구독 해제
