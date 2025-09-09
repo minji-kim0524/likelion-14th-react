@@ -1,21 +1,18 @@
-import { LearnSection } from '@/components'
-import RandomCountUp from './demo'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { Toaster } from 'sonner'
+import '@/styles/main.css'
+import App from './app'
 import ErrorBoundary from './error-boundar'
 
-export default function App() {
-  // throw new Error('App 에러 발생')
+const root = document.getElementById('root')
+if (!root) throw new Error('문서에 #root 요소가 존재하지 않습니다.')
 
-  return (
-    <LearnSection title="랜덤 카운트 업" className="p-10">
-      <ErrorBoundary
-        FallbackComponent={
-          <p role="alert" className="bg-red-800 text-white p-10">
-            오류 발생!
-          </p>
-        }
-      >
-        <RandomCountUp />
-      </ErrorBoundary>
-    </LearnSection>
-  )
-}
+createRoot(root).render(
+  <StrictMode>
+    <ErrorBoundary>
+      <App />
+      <Toaster position="bottom-center" />
+    </ErrorBoundary>
+  </StrictMode>
+)
