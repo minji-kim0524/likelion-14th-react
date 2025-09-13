@@ -22,7 +22,7 @@ export type Database = {
           id: string
           phone: string | null
           profile_url: string | null
-          updated_at: string | null
+          update_at: string | null
           username: string | null
         }
         Insert: {
@@ -32,7 +32,7 @@ export type Database = {
           id?: string
           phone?: string | null
           profile_url?: string | null
-          updated_at?: string | null
+          update_at?: string | null
           username?: string | null
         }
         Update: {
@@ -42,8 +42,35 @@ export type Database = {
           id?: string
           phone?: string | null
           profile_url?: string | null
-          updated_at?: string | null
+          update_at?: string | null
           username?: string | null
+        }
+        Relationships: []
+      }
+      todos: {
+        Row: {
+          created_at: string
+          doit: string
+          done: boolean
+          id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          doit: string
+          done?: boolean
+          id?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          doit?: string
+          done?: boolean
+          id?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
