@@ -3,19 +3,23 @@ import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { useToggleState } from '@/hooks'
 import supabase from '@/libs/supabase'
-import { navigate, tw } from '@/utils'
+import { tw } from '@/utils'
 
 type SigninFormData = {
   email: string
   password: string
 }
 
-export default function SignInForm() {
+interface Props {
+  onSwitchForm: () => void
+  onClose: () => void
+}
+
+export default function SignInForm({ onSwitchForm, onClose }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<SigninFormData>({
     mode: 'onChange',
   })
@@ -34,17 +38,8 @@ export default function SignInForm() {
     } else {
       if (data.user) {
         const { username } = data.user.user_metadata
-
-        toast.success(`${username}님! 로그인이 성공되었습니다.`, {
-          action: {
-            label: '프로필 페이지로 이동',
-            onClick: () => {
-              navigate('profile')
-
-              reset()
-            },
-          },
-        })
+        toast.success(`${username}님! 로그인되었습니다.`)
+        onClose()
       }
     }
   }
@@ -74,7 +69,7 @@ export default function SignInForm() {
             className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
               errors.email
                 ? 'border-red-500 ring-red-300'
-                : 'border-gray-300 focus:ring-blue-300'
+                : 'border-gray-300 focus:ring-emerald-300'
             }`}
           />
           {errors.email && (
@@ -107,7 +102,7 @@ export default function SignInForm() {
               className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
                 errors.password
                   ? 'border-red-500 ring-red-300'
-                  : 'border-gray-300 focus:ring-blue-300'
+                  : 'border-gray-300 focus:ring-emerald-300'
               }`}
             />
             <button
@@ -121,7 +116,7 @@ export default function SignInForm() {
                 'px-2 py-1',
                 'text-sm text-gray-600 bg-gray-50',
                 'hover:bg-gray-200',
-                'focus:outline-none focus:ring focus:ring-blue-300'
+                'focus:outline-none focus:ring focus:ring-emerald-300'
               )}
               aria-label={showPassword ? '패스워드 숨기기' : '패스워드 표시'}
               title={showPassword ? '패스워드 숨기기' : '패스워드 표시'}
@@ -145,16 +140,29 @@ export default function SignInForm() {
           className={tw(
             'cursor-pointer',
             'w-full border-0 py-3 rounded',
-            'border-1 border-blue-600',
-            'bg-blue-600 text-white',
-            'hover:bg-blue-700',
-            'focus:bg-blue-800 focus:border-blue-800',
+            'border-1 border-emerald-600',
+            'bg-emerald-600 text-white',
+            'hover:bg-emerald-700',
+            'focus:bg-emerald-800 focus:border-emerald-800',
             'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
           )}
         >
           {isSubmitting ? '로그인 중...' : '로그인'}
         </button>
       </form>
+      <div className="flex justify-center mt-4 text-sm">
+        <p className="text-gray-600">계정이 없으신가요?</p>
+        <button
+          type="button"
+          onClick={onSwitchForm}
+          className={tw(
+            'border-0 bg-transparent',
+            'text-emerald-600 hover:text-emerald-700 font-medium ml-1'
+          )}
+        >
+          회원가입
+        </button>
+      </div>
     </div>
   )
 }

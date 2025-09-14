@@ -3,7 +3,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { toast } from 'sonner'
 import { useToggleState } from '@/hooks'
 import supabase from '@/libs/supabase'
-import { navigate, tw } from '@/utils'
+import { tw } from '@/utils'
 
 type SignupFormData = {
   name: string
@@ -13,7 +13,12 @@ type SignupFormData = {
   bio?: string
 }
 
-export default function SignUpForm() {
+interface Props {
+  onSwitchForm: () => void
+  onClose: () => void
+}
+
+export default function SignUpForm({ onSwitchForm, onClose }: Props) {
   const {
     register,
     handleSubmit,
@@ -62,9 +67,7 @@ export default function SignUpForm() {
           )
         } else {
           toast.success('회원가입에 성공했습니다!')
-
-          navigate('signin')
-
+          onClose()
           reset()
         }
       }
@@ -97,7 +100,7 @@ export default function SignUpForm() {
               'w-full px-3 py-2 border rounded focus:outline-none focus:ring',
               errors.name
                 ? 'border-red-500 ring-red-300'
-                : 'border-gray-300 focus:ring-blue-300'
+                : 'border-gray-300 focus:ring-emerald-300'
             )}
           />
           {errors.name && (
@@ -132,7 +135,7 @@ export default function SignUpForm() {
               'w-full px-3 py-2 border rounded focus:outline-none focus:ring',
               errors.email
                 ? 'border-red-500 ring-red-300'
-                : 'border-gray-300 focus:ring-blue-300'
+                : 'border-gray-300 focus:ring-emerald-300'
             )}
           />
           {errors.email && (
@@ -156,7 +159,7 @@ export default function SignUpForm() {
             aria-describedby={errors.bio ? 'signup-bio-error' : undefined}
             {...register('bio')}
             rows={3}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300 focus:ring-blue-300 resize-none"
+            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring border-gray-300 focus:ring-emerald-300 resize-none"
             placeholder="자신을 간단히 소개해 주세요"
           />
           {errors.bio && (
@@ -202,7 +205,7 @@ export default function SignUpForm() {
                 'w-full px-3 py-2 border rounded focus:outline-none focus:ring pr-12',
                 errors.password
                   ? 'border-red-500 ring-red-300'
-                  : 'border-gray-300 focus:ring-blue-300'
+                  : 'border-gray-300 focus:ring-emerald-300'
               )}
             />
 
@@ -220,7 +223,7 @@ export default function SignUpForm() {
                 'px-2 py-1',
                 'text-sm text-gray-600 bg-gray-50',
                 'hover:bg-gray-200',
-                'focus:outline-none focus:ring focus:ring-blue-300'
+                'focus:outline-none focus:ring focus:ring-emerald-300'
               )}
             >
               {showPassword1 ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -259,7 +262,7 @@ export default function SignUpForm() {
                 'w-full px-3 py-2 border rounded focus:outline-none focus:ring pr-12',
                 errors.password2
                   ? 'border-red-500 ring-red-300'
-                  : 'border-gray-300 focus:ring-blue-300'
+                  : 'border-gray-300 focus:ring-emerald-300'
               )}
             />
 
@@ -277,7 +280,7 @@ export default function SignUpForm() {
                 'px-2 py-1',
                 'text-sm text-gray-600 bg-gray-50',
                 'hover:bg-gray-200',
-                'focus:outline-none focus:ring focus:ring-blue-300'
+                'focus:outline-none focus:ring focus:ring-emerald-300'
               )}
             >
               {showPassword2 ? <Eye size={16} /> : <EyeOff size={16} />}
@@ -298,15 +301,28 @@ export default function SignUpForm() {
           aria-disabled={isSubmitting}
           className={tw(
             'cursor-pointer',
-            'w-full bg-blue-600 border-1 border-blue-600 text-white py-3 rounded',
-            'hover:bg-blue-700',
-            'focus:bg-blue-800 focus:border-blue-800',
+            'w-full bg-emerald-600 border-1 border-emerald-600 text-white py-3 rounded',
+            'hover:bg-emerald-700',
+            'focus:bg-emerald-800 focus:border-emerald-800',
             'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
           )}
         >
           {isSubmitting ? '가입 중...' : '회원가입'}
         </button>
       </form>
+      <div className="flex justify-center mt-4 text-sm">
+        <p className="text-gray-600">이미 계정이 있으신가요?</p>
+        <button
+          type="button"
+          onClick={onSwitchForm}
+          className={tw(
+            'border-0 bg-transparent',
+            'text-emerald-600 hover:text-emerald-700 font-medium ml-1 focus:outline-none'
+          )}
+        >
+          로그인
+        </button>
+      </div>
     </div>
   )
 }
