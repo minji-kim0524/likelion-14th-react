@@ -10,12 +10,13 @@ const root = document.getElementById('root')
 if (!root) throw new Error('문서에 #root 요소가 존재하지 않습니다.')
 
 createRoot(root).render(
-  <StrictMode>
+  // toast 중복 발생으로 StrictMode 해제
+  <>
     <ErrorBoundary>
       <AuthProvider>
         <App />
       </AuthProvider>
-      <Toaster position="bottom-right" />
+      <Toaster position="top-center" />
     </ErrorBoundary>
-  </StrictMode>
+  </>
 )
