@@ -8,7 +8,7 @@ import supabase, { type Todo, type TodoInsert, TodoUpdate } from '../index'
 // 생성(Create)
 
 export const createTodo = async (newTodo: TodoInsert): Promise<Todo> => {
-  const { error, data: createTodo } = await supabase
+  const { error, data: createdTodo } = await supabase
     .from('todos')
     .insert([newTodo])
     .select('*')
@@ -20,14 +20,17 @@ export const createTodo = async (newTodo: TodoInsert): Promise<Todo> => {
     throw new Error(errorMessage)
   }
 
-  return createTodo
+  return createdTodo
 }
 
 // --------------------------------------------------------------------------
 // 조회(Read)
 
 export const readTodos = async (): Promise<Todo[]> => {
-  const { error, data: todos } = await supabase.from('todos').select('*')
+  const { error, data: todos } = await supabase
+    .from('todos')
+    .select('*')
+    .order('created_at', { ascending: false })
 
   if (error) {
     const errorMessage = '할 일 목록(Todos) 조회 실패!'
@@ -52,7 +55,7 @@ export const updateTodo = async (
     .single()
 
   if (error) {
-    const errorMessage = '할 일 (Todo) 수정 실패!'
+    const errorMessage = '할 일(Todo) 수정 실패!'
     toast.error(`${errorMessage} ${error.message}`)
     throw new Error(errorMessage)
   }
@@ -63,11 +66,11 @@ export const updateTodo = async (
 // --------------------------------------------------------------------------
 // 삭제(Delete)
 
-export const deleteTodo = async (deletedTodoId: Todo['id']): Promise<Todo> => {
+export const deleteTodo = async (deleteTodoId: Todo['id']): Promise<Todo> => {
   const { error, data: deletedTodo } = await supabase
     .from('todos')
     .delete()
-    .eq('id', deletedTodoId)
+    .eq('id', deleteTodoId)
     .select()
     .single()
 
