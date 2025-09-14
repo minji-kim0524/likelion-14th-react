@@ -1,21 +1,40 @@
 import {
   ChangeEvent,
   RefObject,
+  memo,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react'
+import type { Todo } from '@/libs/supabase'
+import { deleteTodo, updateTodo } from '@/libs/supabase/api/todos'
 import { tw } from '@/utils'
 import { useTodoListDispatch } from '../../context'
-import { type Todo } from '../../reducer'
 import S from './style.module.css'
 
-export default function TodoItem({ todo }: { todo: Todo }) {
+function TodoItem({ todo }: { todo: Todo }) {
   const { removeTodo, editTodo } = useTodoListDispatch()
-  const handleRemove = () => removeTodo(todo.id)
-  const handleToggle = (e: ChangeEvent<HTMLInputElement>) => {
-    editTodo({ ...todo, done: e.target.checked })
+
+  // 할 일 삭제 기능 (비동기 함수로 변경)
+  const handleRemove = async () => {
+    // 비동기 처리
+    const deletedTodo = await deleteTodo(todo.id)
+
+    // 동기 처리
+    removeTodo(deletedTodo.id)
+  }
+
+  // 할 일 완료 여부 토글 기능 (비동기 함수로 변경)
+  const handleToggle = async (e: ChangeEvent<HTMLInputElement>) => {
+    // 비동기 처리 (Superbase 단에서 처리)
+    const updatedTodo = await updateTodo({
+      id: todo.id,
+      done: e.target.checked,
+    })
+
+    // 동기 처리 (UI 단에서 처리)
+    editTodo(updatedTodo)
   }
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -81,6 +100,8 @@ export default function TodoItem({ todo }: { todo: Todo }) {
   )
 }
 
+export default memo(TodoItem)
+
 function EditMode({
   ref,
   todo,
@@ -92,12 +113,20 @@ function EditMode({
   onEdit: (editTodo: Todo) => void
   onEditModeOff: () => void
 }) {
-  const handleEdit = useCallback(() => {
+  // 비동기 함수로 변경
+  const handleEdit = useCallback(async () => {
     const input = ref.current
 
     if (input) {
-      const editTodo = { ...todo, doit: input.value }
-      onEdit(editTodo)
+      // 비동기 요청
+      // Supabase 데이터베이스인 Todos 테이블의 행 데이터 업데이트
+      const updatedTodo = await updateTodo({ id: todo.id, doit: input.value })
+
+      // 동기 요청
+      // TodoList 컨텍스트 상태 업데이트
+      onEdit(updatedTodo)
+
+      // 편집 모드 종료 (일반 모드로 변경)
       onEditModeOff()
     }
   }, [onEdit, onEditModeOff, todo, ref])
